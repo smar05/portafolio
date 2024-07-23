@@ -11,7 +11,7 @@ function HeaderStart() {
             <div className="col-lg-5 px-5 pl-lg-0 pb-5 pb-lg-0">
               <img
                 className="img-fluid w-100 rounded-circle shadow-sm"
-                src="src/assets/img/profile.jpg"
+                src="src/assets/img/profile.png"
                 alt=""
               />
             </div>
