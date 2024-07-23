@@ -29,7 +29,11 @@ function HeaderStart() {
                 Engineer
               </div>
               <div className="d-flex align-items-center justify-content-center justify-content-lg-start pt-5">
-                <a href="" className="btn btn-outline-light mr-5">
+                <a
+                  href="https://drive.google.com/file/d/1vQGQNQiIWWTX4S56rBACE5S1M7qEPZYA/view?usp=sharing"
+                  className="btn btn-outline-light mr-5"
+                  target="_blank"
+                >
                   Download CV
                 </a>
                 <button

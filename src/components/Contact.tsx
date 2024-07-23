@@ -1,4 +1,66 @@
+import { useState } from "react";
+
+interface IContactEmail {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
 function Contact() {
+  const [formData, setFormData] = useState<IContactEmail>({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleChange = (data: string, e: any) => {
+    const { value } = e.target;
+
+    setFormData({
+      ...formData,
+      [data]: value,
+    });
+  };
+
+  const validate = (): boolean => {
+    const newErrors: IContactEmail = {} as any;
+
+    if (!formData.name || formData.name.length < 2) {
+      newErrors.name = "El nombre debe tener al menos 2 caracteres.";
+      return false;
+    }
+    if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "El correo electrónico es inválido.";
+      return false;
+    }
+    if (!formData.subject) {
+      newErrors.subject = "Error en el subject";
+      return false;
+    }
+    if (!formData.message || formData.message.length < 10) {
+      newErrors.message = "El mensaje debe tener al menos 10 caracteres.";
+      return false;
+    }
+
+    return true;
+  };
+
+  const sendEmail = (): void => {
+    if (!validate()) return;
+
+    const mailtoLink: string = `mailto:mantillasanchezr@gmail.com?subject=${encodeURIComponent(
+      formData.subject
+    )}&body=Nombre: ${encodeURIComponent(
+      formData.name
+    )}%0AEmail: ${encodeURIComponent(
+      formData.email
+    )}%0AMensaje: ${encodeURIComponent(formData.message)}`;
+
+    window.location.href = mailtoLink;
+  };
+
   return (
     <>
       <div className="container-fluid py-5" id="contact">
@@ -18,7 +80,12 @@ function Contact() {
             <div className="col-lg-8">
               <div className="contact-form text-center">
                 <div id="success"></div>
-                <form name="sentMessage" id="contactForm" noValidate>
+                <form
+                  name="sentMessage"
+                  id="contactForm"
+                  noValidate
+                  onSubmit={sendEmail}
+                >
                   <div className="form-row">
                     <div className="control-group col-sm-6">
                       <input
@@ -28,6 +95,8 @@ function Contact() {
                         placeholder="Your Name"
                         required={true}
                         data-validation-required-message="Please enter your name"
+                        value={formData.name}
+                        onChange={() => handleChange("name", event)}
                       />
                       <p className="help-block text-danger"></p>
                     </div>
@@ -39,6 +108,8 @@ function Contact() {
                         placeholder="Your Email"
                         required={true}
                         data-validation-required-message="Please enter your email"
+                        value={formData.email}
+                        onChange={() => handleChange("email", event)}
                       />
                       <p className="help-block text-danger"></p>
                     </div>
@@ -51,6 +122,8 @@ function Contact() {
                       placeholder="Subject"
                       required={true}
                       data-validation-required-message="Please enter a subject"
+                      value={formData.subject}
+                      onChange={() => handleChange("subject", event)}
                     />
                     <p className="help-block text-danger"></p>
                   </div>
@@ -62,6 +135,8 @@ function Contact() {
                       placeholder="Message"
                       required={true}
                       data-validation-required-message="Please enter your message"
+                      value={formData.message}
+                      onChange={() => handleChange("message", event)}
                     ></textarea>
                     <p className="help-block text-danger"></p>
                   </div>
@@ -70,6 +145,7 @@ function Contact() {
                       className="btn btn-outline-primary"
                       type="submit"
                       id="sendMessageButton"
+                      disabled={!validate()}
                     >
                       Send Message
                     </button>
