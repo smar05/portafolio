@@ -1,5 +1,6 @@
 import About from "./components/About";
 import HeaderStart from "./components/HeaderStart";
+import Qualification from "./components/Qualification";
 import VideoModal from "./components/VideoModal";
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
       <VideoModal />
       <HeaderStart />
       <About />
+      <Qualification />
     </>
   );
 }
