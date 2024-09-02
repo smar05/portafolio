@@ -1,4 +1,21 @@
+import { useEffect, useState } from "react";
+import { IaboutMe } from "../interfaces/IaboutMe";
+import { BackService, EnumDbEndPoints } from "../services/back";
+
 function About() {
+  const [dbData, setDbData] = useState<IaboutMe>(null as any);
+
+  useEffect(() => {
+    const fetchDataDb = async () => {
+      try {
+        const response = await BackService.getDbData(EnumDbEndPoints.ABOUT_ME);
+        setDbData(response.data);
+      } catch (error) {}
+    };
+
+    fetchDataDb();
+  }, []);
+
   return (
     <>
       <div className="container-fluid py-5" id="about">
@@ -8,10 +25,10 @@ function About() {
               className="display-1 text-uppercase text-white"
               style={{ WebkitTextStroke: "1px #dee2e6" }}
             >
-              About
+              {dbData?.backTitle}
             </h1>
             <h1 className="position-absolute text-uppercase text-primary">
-              About Me
+              {dbData?.title}
             </h1>
           </div>
           <div className="row align-items-center">
@@ -23,65 +40,50 @@ function About() {
               />
             </div>
             <div className="col-lg-7">
-              <h3 className="mb-4">Fullstack Developer</h3>
-              <p>
-                With more than 3 years of experience in software development for
-                various industries, I stand out for my focuson code quality and
-                team collaboration. My skills include Java, JavaScript,
-                databases and frameworks suchas MySQL, Angular and Node.js.
-                Completing my degree in electronic engineering from the
-                Francisco José deCaldas District University and certifications
-                in Programming and Fullstack Developer. My goal is to
-                continuegrowing professionally and adding value in challenging
-                environments, driving project success and contributing
-                toorganizational growth.
-              </p>
+              <h3 className="mb-4">{dbData?.subTitle}</h3>
+              <p>{dbData?.content}</p>
               <div className="row mb-3">
                 <div className="col-sm-6 py-2">
                   <h6>
-                    Name:{" "}
-                    <span className="text-secondary">
-                      Ricardo Andres Mantilla Sanchez
-                    </span>
+                    Name: <span className="text-secondary">{dbData?.name}</span>
                   </h6>
                 </div>
                 <div className="col-sm-6 py-2">
                   <h6>
                     Birthday:{" "}
-                    <span className="text-secondary">7 August 1998</span>
+                    <span className="text-secondary">{dbData?.birthday}</span>
                   </h6>
                 </div>
                 <div className="col-sm-6 py-2">
                   <h6>
                     Degree:{" "}
-                    <span className="text-secondary">Electronic Engineer</span>
+                    <span className="text-secondary">{dbData?.degree}</span>
                   </h6>
                 </div>
                 <div className="col-sm-6 py-2">
                   <h6>
                     Experience:{" "}
                     <span className="text-secondary">
-                      {new Date().getFullYear() - 2021} years
+                      {new Date().getFullYear() - dbData?.experienceSince} years
                     </span>
                   </h6>
                 </div>
                 <div className="col-sm-6 py-2">
                   <h6>
                     Phone:{" "}
-                    <span className="text-secondary">+57 300 260 2502</span>
+                    <span className="text-secondary">{dbData?.phone}</span>
                   </h6>
                 </div>
                 <div className="col-sm-6 py-2">
                   <h6>
                     Email:{" "}
-                    <span className="text-secondary">
-                      mantillasanchezr@gmail.com
-                    </span>
+                    <span className="text-secondary">{dbData?.email}</span>
                   </h6>
                 </div>
                 <div className="col-sm-6 py-2">
                   <h6>
-                    Freelance: <span className="text-secondary">Available</span>
+                    Freelance:{" "}
+                    <span className="text-secondary">{dbData?.freelance}</span>
                   </h6>
                 </div>
               </div>

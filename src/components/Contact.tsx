@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Icontact } from "../interfaces/Icontact";
+import { BackService, EnumDbEndPoints } from "../services/back";
 
 interface IContactEmail {
   name: string;
@@ -8,6 +10,21 @@ interface IContactEmail {
 }
 
 function Contact() {
+  const [dbData, setDbData] = useState<Icontact>(null as any);
+
+  useEffect(() => {
+    const fetchDataDb = async () => {
+      try {
+        const response = await BackService.getDbData(
+          EnumDbEndPoints.CONTACT_ME
+        );
+        setDbData(response.data);
+      } catch (error) {}
+    };
+
+    fetchDataDb();
+  }, []);
+
   const [formData, setFormData] = useState<IContactEmail>({
     name: "",
     email: "",
@@ -50,7 +67,9 @@ function Contact() {
   const sendEmail = (): void => {
     if (!validate()) return;
 
-    const mailtoLink: string = `mailto:mantillasanchezr@gmail.com?subject=${encodeURIComponent(
+    const mailtoLink: string = `mailto:${
+      dbData.myEmail
+    }?subject=${encodeURIComponent(
       formData.subject
     )}&body=Nombre: ${encodeURIComponent(
       formData.name
@@ -70,10 +89,10 @@ function Contact() {
               className="display-1 text-uppercase text-white"
               style={{ WebkitTextStroke: "1px #dee2e6" }}
             >
-              Contact
+              {dbData?.backTitle}
             </h1>
             <h1 className="position-absolute text-uppercase text-primary">
-              Contact Me
+              {dbData?.title}
             </h1>
           </div>
           <div className="row justify-content-center">
@@ -94,7 +113,9 @@ function Contact() {
                         id="name"
                         placeholder="Your Name"
                         required={true}
-                        data-validation-required-message="Please enter your name"
+                        data-validation-required-message={
+                          dbData?.placeholderName
+                        }
                         value={formData.name}
                         onChange={() => handleChange("name", event)}
                       />
@@ -107,7 +128,9 @@ function Contact() {
                         id="email"
                         placeholder="Your Email"
                         required={true}
-                        data-validation-required-message="Please enter your email"
+                        data-validation-required-message={
+                          dbData?.placeholderEmail
+                        }
                         value={formData.email}
                         onChange={() => handleChange("email", event)}
                       />
@@ -121,7 +144,9 @@ function Contact() {
                       id="subject"
                       placeholder="Subject"
                       required={true}
-                      data-validation-required-message="Please enter a subject"
+                      data-validation-required-message={
+                        dbData?.placeholderSubject
+                      }
                       value={formData.subject}
                       onChange={() => handleChange("subject", event)}
                     />
@@ -134,7 +159,9 @@ function Contact() {
                       id="message"
                       placeholder="Message"
                       required={true}
-                      data-validation-required-message="Please enter your message"
+                      data-validation-required-message={
+                        dbData?.placeholderMessage
+                      }
                       value={formData.message}
                       onChange={() => handleChange("message", event)}
                     ></textarea>
@@ -147,7 +174,7 @@ function Contact() {
                       id="sendMessageButton"
                       disabled={!validate()}
                     >
-                      Send Message
+                      {dbData?.textSubmit}
                     </button>
                   </div>
                 </form>

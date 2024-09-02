@@ -1,4 +1,23 @@
+import { useEffect, useState } from "react";
+import { BackService, EnumDbEndPoints } from "../services/back";
+import { IPresentation } from "../interfaces/Ipresentation";
+
 function HeaderStart() {
+  const [dbData, setDbData] = useState<IPresentation>(null as any);
+
+  useEffect(() => {
+    const fetchDataDb = async () => {
+      try {
+        const response = await BackService.getDbData(
+          EnumDbEndPoints.PRESENTATION
+        );
+        setDbData(response.data);
+      } catch (error) {}
+    };
+
+    fetchDataDb();
+  }, []);
+
   return (
     <>
       <div
@@ -11,7 +30,7 @@ function HeaderStart() {
             <div className="col-lg-5 px-5 pl-lg-0 pb-5 pb-lg-0">
               <img
                 className="img-fluid w-100 rounded-circle shadow-sm"
-                src="src/assets/img/profile.png"
+                src={dbData?.profileImg}
                 alt=""
               />
             </div>
@@ -21,32 +40,29 @@ function HeaderStart() {
                 className="display-3 text-uppercase text-primary mb-2"
                 style={{ WebkitTextStroke: "2px #ffffff" }}
               >
-                Ricardo Andres Mantilla Sanchez
+                {dbData?.name}
               </h1>
               <h1 className="typed-text-output d-inline font-weight-lighter text-white"></h1>
-              <div className="typed-text d-none">
-                Software Developer | Fullstack Developer | Software | Electronic
-                Engineer
-              </div>
+              <div className="typed-text d-none">{dbData?.tags}</div>
               <div className="d-flex align-items-center justify-content-center justify-content-lg-start pt-5">
                 <a
-                  href="https://drive.google.com/file/d/1vQGQNQiIWWTX4S56rBACE5S1M7qEPZYA/view?usp=sharing"
+                  href={dbData?.hv.url}
                   className="btn btn-outline-light mr-5"
                   target="_blank"
                 >
-                  Download CV
+                  {dbData?.hv.text}
                 </a>
                 <button
                   type="button"
                   className="btn-play"
                   data-toggle="modal"
-                  data-src="https://www.youtube.com/embed/DWRcNpR6Kdc"
+                  data-src={dbData?.video.url}
                   data-target="#videoModal"
                 >
                   <span></span>
                 </button>
                 <h5 className="font-weight-normal text-white m-0 ml-4 d-none d-sm-block">
-                  Play Video
+                  {dbData?.video.text}
                 </h5>
               </div>
             </div>
