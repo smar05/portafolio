@@ -28,7 +28,10 @@ function App() {
         <Route
           path={EnumPages.ADMIN}
           element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
+            <PrivateRoute
+              isAuthenticated={isAuthenticated}
+              setIsAuthenticated={setIsAuthenticated}
+            >
               <Admin />
             </PrivateRoute>
           }
@@ -36,7 +39,10 @@ function App() {
         <Route
           path={EnumPages.EDIT_PRESENTATION}
           element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
+            <PrivateRoute
+              isAuthenticated={isAuthenticated}
+              setIsAuthenticated={setIsAuthenticated}
+            >
               <EditPresentation />
             </PrivateRoute>
           }
@@ -44,7 +50,10 @@ function App() {
         <Route
           path={EnumPages.EDIT_ABOUT_ME}
           element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
+            <PrivateRoute
+              isAuthenticated={isAuthenticated}
+              setIsAuthenticated={setIsAuthenticated}
+            >
               <EditAboutMe />
             </PrivateRoute>
           }
@@ -52,7 +61,10 @@ function App() {
         <Route
           path={EnumPages.EDIT_EDUCATION_AND_EXPERIENCE}
           element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
+            <PrivateRoute
+              isAuthenticated={isAuthenticated}
+              setIsAuthenticated={setIsAuthenticated}
+            >
               <EditEducationAndExperience />
             </PrivateRoute>
           }
@@ -60,7 +72,10 @@ function App() {
         <Route
           path={EnumPages.EDIT_SKILLS}
           element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
+            <PrivateRoute
+              isAuthenticated={isAuthenticated}
+              setIsAuthenticated={setIsAuthenticated}
+            >
               <EditSkills />
             </PrivateRoute>
           }
@@ -68,7 +83,10 @@ function App() {
         <Route
           path={EnumPages.EDIT_CONTACT}
           element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
+            <PrivateRoute
+              isAuthenticated={isAuthenticated}
+              setIsAuthenticated={setIsAuthenticated}
+            >
               <EditContact />
             </PrivateRoute>
           }

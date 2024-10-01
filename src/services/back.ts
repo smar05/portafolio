@@ -46,4 +46,30 @@ const putData = (
   });
 };
 
-export const BackService = { getDbData, login, putData };
+/**
+ * Validar el token
+ *
+ * @return {*}  {Promise<boolean>}
+ */
+const validateToken = async (): Promise<boolean> => {
+  const token: string = localStorage.getItem("token") || (null as any);
+
+  if (!token) {
+    return false;
+  }
+
+  let valido: boolean = false;
+  try {
+    valido = (
+      await axios.post(`${backUrl}validate-token`, null, {
+        headers: { Authorization: token },
+      })
+    ).data.tokenValido;
+  } catch (error) {
+    return false;
+  }
+
+  return valido;
+};
+
+export const BackService = { getDbData, login, putData, validateToken };
