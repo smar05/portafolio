@@ -30,4 +30,20 @@ const login = (
   return axios.post(`${backUrl}login`, { email, password });
 };
 
-export const BackService = { getDbData, login };
+/**
+ * REST put
+ *
+ * @param {string} endpoint
+ * @param {*} data
+ * @return {*}  {Promise<AxiosResponse<any, any>>}
+ */
+const putData = (
+  endpoint: string,
+  data: any
+): Promise<AxiosResponse<any, any>> => {
+  return axios.put(`${backUrl}${endpoint}`, data, {
+    headers: { Authorization: localStorage.getItem("token") || null },
+  });
+};
+
+export const BackService = { getDbData, login, putData };

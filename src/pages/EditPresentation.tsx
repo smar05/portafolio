@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { EnumPages } from "../enums/EnumPages";
+import { IPresentation } from "../interfaces/Ipresentation";
+import { BackService, EnumDbEndPoints } from "../services/back";
 
 interface Presentation {
   profileImg: string;
@@ -16,6 +20,7 @@ interface Presentation {
 }
 
 const EditPresentation: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<Presentation>({
     profileImg: "",
     name: "",
@@ -30,6 +35,28 @@ const EditPresentation: React.FC = () => {
     },
     last: false,
   });
+
+  const [dbPresentation, setDbPresentation] = useState<IPresentation>(
+    null as any
+  );
+
+  useEffect(() => {
+    consultarInfo();
+  }, []);
+
+  function consultarInfo(): void {
+    const fetchDataDb = async () => {
+      try {
+        const response = await BackService.getDbData(
+          EnumDbEndPoints.PRESENTATION
+        );
+        setDbPresentation(response.data);
+        setFormData(response.data);
+      } catch (error) {}
+    };
+
+    fetchDataDb();
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,9 +80,26 @@ const EditPresentation: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data:", formData);
+
+    let resPresentation;
+    try {
+      resPresentation = await BackService.putData(
+        `${EnumDbEndPoints.PRESENTATION}/${dbPresentation._id}`,
+        formData
+      );
+    } catch (error) {
+      alert("An error has occurred updating the information");
+    }
+
+    if (!resPresentation?.data.actualizado) {
+      alert("An error has occurred updating the information");
+      return;
+    }
+
+    alert("The information has been updated");
+    navigate(EnumPages.ADMIN);
   };
 
   return (
