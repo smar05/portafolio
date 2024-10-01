@@ -47,20 +47,23 @@ const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
       return;
     }
 
-    let autenticated: boolean = false;
+    let autenticatedData: { autenticated: boolean; token: string } = {
+      autenticated: false,
+      token: null as any,
+    };
     try {
-      autenticated = (await BackService.login(email, password)).data
-        .autenticated;
+      autenticatedData = (await BackService.login(email, password)).data;
     } catch (error) {
       setIsAuthenticated(false);
       return;
     }
 
-    if (!autenticated) {
+    if (!autenticatedData.autenticated) {
       setIsAuthenticated(false);
       return;
     }
 
+    localStorage.setItem("token", autenticatedData.token);
     setIsAuthenticated(true);
     navigate(EnumPages.ADMIN);
     return;
