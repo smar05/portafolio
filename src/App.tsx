@@ -6,6 +6,7 @@ import Admin from "./pages/Admin";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import PrivateRoute from "./router/PrivateRoute";
+import EditPresentation from "./pages/EditPresentation";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -25,6 +26,14 @@ function App() {
           element={
             <PrivateRoute isAuthenticated={isAuthenticated}>
               <Admin />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={EnumPages.EDIT_PRESENTATION}
+          element={
+            <PrivateRoute isAuthenticated={isAuthenticated}>
+              <EditPresentation />
             </PrivateRoute>
           }
         />
