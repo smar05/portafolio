@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { EnumPages } from "../enums/EnumPages";
+import { BackService } from "../services/back";
 
 interface LoginProps {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,15 +40,29 @@ const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
     return valid;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (validateForm()) {
-      setIsAuthenticated(true);
-      navigate(EnumPages.ADMIN);
+    if (!validateForm()) {
+      setIsAuthenticated(false);
       return;
     }
 
-    navigate(EnumPages.HOME);
+    let autenticated: boolean = false;
+    try {
+      autenticated = (await BackService.login(email, password)).data
+        .autenticated;
+    } catch (error) {
+      setIsAuthenticated(false);
+      return;
+    }
+
+    if (!autenticated) {
+      setIsAuthenticated(false);
+      return;
+    }
+
+    setIsAuthenticated(true);
+    navigate(EnumPages.ADMIN);
     return;
   };
 

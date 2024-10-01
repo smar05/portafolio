@@ -16,4 +16,18 @@ const getDbData = (
   return axios.get(`${backUrl}${endpoint}`);
 };
 
-export const BackService = { getDbData };
+/**
+ * Login
+ *
+ * @param {string} email
+ * @param {string} password
+ * @return {*}  {Promise<AxiosResponse<any, any>>}
+ */
+const login = (
+  email: string,
+  password: string
+): Promise<AxiosResponse<any, any>> => {
+  return axios.post(`${backUrl}login`, { email, password });
+};
+
+export const BackService = { getDbData, login };
