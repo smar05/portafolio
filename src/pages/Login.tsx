@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
+import { EnumPages } from "../enums/EnumPages";
 
 interface LoginProps {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
@@ -42,11 +43,11 @@ const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
     e.preventDefault();
     if (validateForm()) {
       setIsAuthenticated(true);
-      navigate("/admin");
+      navigate(EnumPages.ADMIN);
       return;
     }
 
-    navigate("/");
+    navigate(EnumPages.HOME);
     return;
   };
 
