@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { EnumPages } from "../enums/EnumPages";
+import { IaboutMe } from "../interfaces/IaboutMe";
+import { BackService, EnumDbEndPoints } from "../services/back";
 
 interface AboutMe {
   backTitle: string;
@@ -16,6 +20,7 @@ interface AboutMe {
 }
 
 const EditAboutMe: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<AboutMe>({
     backTitle: "",
     title: "",
@@ -30,6 +35,23 @@ const EditAboutMe: React.FC = () => {
     freelance: "",
     last: false,
   });
+  const [dbAboutMe, setDbAboutMe] = useState<IaboutMe>(null as any);
+
+  useEffect(() => {
+    consultarInfo();
+  }, []);
+
+  function consultarInfo(): void {
+    const fetchDataDb = async () => {
+      try {
+        const response = await BackService.getDbData(EnumDbEndPoints.ABOUT_ME);
+        setDbAboutMe(response.data);
+        setFormData(response.data);
+      } catch (error) {}
+    };
+
+    fetchDataDb();
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,9 +61,26 @@ const EditAboutMe: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data:", formData);
+
+    let resAboutMe;
+    try {
+      resAboutMe = await BackService.putData(
+        `${EnumDbEndPoints.ABOUT_ME}/${dbAboutMe._id}`,
+        formData
+      );
+    } catch (error) {
+      alert("An error has occurred updating the information");
+    }
+
+    if (!resAboutMe?.data.actualizado) {
+      alert("An error has occurred updating the information");
+      return;
+    }
+
+    alert("The information has been updated");
+    navigate(EnumPages.ADMIN);
   };
 
   return (
