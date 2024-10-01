@@ -1,29 +1,43 @@
-import React, { useState } from "react";
-
-interface ContactFormData {
-  backTitle: string;
-  title: string;
-  placeholderName: string;
-  placeholderEmail: string;
-  placeholderSubject: string;
-  placeholderMessage: string;
-  textSubmit: string;
-  myEmail: string;
-  last: boolean;
-}
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { EnumPages } from "../enums/EnumPages";
+import { Icontact } from "../interfaces/Icontact";
+import { BackService, EnumDbEndPoints } from "../services/back";
 
 const EditContact = () => {
-  const [formData, setFormData] = useState<ContactFormData>({
-    backTitle: "Contact Information",
-    title: "Get in Touch",
-    placeholderName: "Your Name",
-    placeholderEmail: "Your Email",
-    placeholderSubject: "Subject",
-    placeholderMessage: "Message",
-    textSubmit: "Send Message",
-    myEmail: "example@email.com",
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<Icontact>({
+    _id: "",
+    backTitle: "",
+    title: "",
+    placeholderName: "",
+    placeholderEmail: "",
+    placeholderSubject: "",
+    placeholderMessage: "",
+    textSubmit: "",
+    myEmail: "",
     last: true,
   });
+
+  const [dbContact, setDbContact] = useState<Icontact>(null as any);
+
+  useEffect(() => {
+    consultarInfo();
+  }, []);
+
+  function consultarInfo(): void {
+    const fetchDataDb = async () => {
+      try {
+        const response = await BackService.getDbData(
+          EnumDbEndPoints.CONTACT_ME
+        );
+        setDbContact(response.data);
+        setFormData(response.data);
+      } catch (error) {}
+    };
+
+    fetchDataDb();
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,10 +47,33 @@ const EditContact = () => {
     }));
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    let resContact;
+    try {
+      resContact = await BackService.putData(
+        `${EnumDbEndPoints.CONTACT_ME}/${dbContact._id}`,
+        formData
+      );
+    } catch (error) {
+      alert("An error has occurred updating the information");
+      return;
+    }
+
+    if (!resContact?.data.actualizado) {
+      alert("An error has occurred updating the information");
+      return;
+    }
+
+    alert("The information has been updated");
+    navigate(EnumPages.ADMIN);
+  };
+
   return (
     <div className="container">
       <h1>Edit Contact Form</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="form-label">Back Title</label>
           <input
@@ -73,7 +110,7 @@ const EditContact = () => {
         <div className="mb-4">
           <label className="form-label">Placeholder Email</label>
           <input
-            type="email"
+            type="text"
             className="form-control"
             name="placeholderEmail"
             value={formData.placeholderEmail}
