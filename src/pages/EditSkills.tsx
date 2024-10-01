@@ -1,26 +1,13 @@
-import React, { useState } from "react";
-
-interface SkillData {
-  name: string;
-  percentage: number;
-  color: string;
-}
-
-interface SkillSection {
-  title: string;
-  data: SkillData[];
-}
-
-interface SkillsFormData {
-  backTitle: string;
-  title: string;
-  frontend: SkillSection;
-  backend: SkillSection;
-  last: boolean;
-}
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { EnumPages } from "../enums/EnumPages";
+import { Iskills } from "../interfaces/Iskills";
+import { BackService, EnumDbEndPoints } from "../services/back";
 
 const EditSkills = () => {
-  const [formData, setFormData] = useState<SkillsFormData>({
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<Iskills>({
+    _id: "",
     backTitle: "Skills Overview",
     title: "My Skills",
     frontend: {
@@ -37,8 +24,25 @@ const EditSkills = () => {
         { name: "Express", percentage: 75, color: "#000000" },
       ],
     },
-    last: true,
   });
+
+  const [dbSkills, setDbSkills] = useState<Iskills>(null as any);
+
+  useEffect(() => {
+    consultarInfo();
+  }, []);
+
+  function consultarInfo(): void {
+    const fetchDataDb = async () => {
+      try {
+        const response = await BackService.getDbData(EnumDbEndPoints.MY_SKILLS);
+        setDbSkills(response.data);
+        setFormData(response.data);
+      } catch (error) {}
+    };
+
+    fetchDataDb();
+  }
 
   const handleSkillChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -62,6 +66,42 @@ const EditSkills = () => {
     });
   };
 
+  // Agregar una nueva habilidad a la sección (frontend o backend)
+  const addNewSkill = (section: "frontend" | "backend") => {
+    setFormData((prevState) => {
+      const newSkill = { name: "", percentage: 0, color: "#000000" };
+      return {
+        ...prevState,
+        [section]: {
+          ...prevState[section],
+          data: [...prevState[section].data, newSkill],
+        },
+      };
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    let resSkills;
+    try {
+      resSkills = await BackService.putData(
+        `${EnumDbEndPoints.MY_SKILLS}/${dbSkills._id}`,
+        formData
+      );
+    } catch (error) {
+      alert("An error has occurred updating the information");
+    }
+
+    if (!resSkills?.data.actualizado) {
+      alert("An error has occurred updating the information");
+      return;
+    }
+
+    alert("The information has been updated");
+    navigate(EnumPages.ADMIN);
+  };
+
   const renderSkillSection = (section: "frontend" | "backend") => (
     <div className="skill-section">
       <h3>{formData[section].title}</h3>
@@ -81,6 +121,8 @@ const EditSkills = () => {
             <label className="form-label">Percentage</label>
             <input
               type="number"
+              max={100}
+              min={0}
               className="form-control"
               name="percentage"
               value={skill.percentage}
@@ -99,13 +141,20 @@ const EditSkills = () => {
           </div>
         </div>
       ))}
+      <button
+        type="button"
+        className="btn btn-secondary my-2"
+        onClick={() => addNewSkill(section)}
+      >
+        Add New Skill
+      </button>
     </div>
   );
 
   return (
     <div className="container">
       <h1>Edit Skills</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="form-label">Back Title</label>
           <input
