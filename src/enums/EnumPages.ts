@@ -3,4 +3,5 @@ export enum EnumPages {
   LOGIN = "/login",
   ADMIN = "/admin",
   EDIT_PRESENTATION = "/edit/presentation",
+  EDIT_ABOUT_ME = "/edit/about-me",
 }
