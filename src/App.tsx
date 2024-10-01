@@ -6,6 +6,7 @@ import Admin from "./pages/Admin";
 import EditAboutMe from "./pages/EditAboutMe";
 import EditEducationAndExperience from "./pages/EditEducationAndExperience";
 import EditPresentation from "./pages/EditPresentation";
+import EditSkills from "./pages/EditSkills";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import PrivateRoute from "./router/PrivateRoute";
@@ -52,6 +53,14 @@ function App() {
           element={
             <PrivateRoute isAuthenticated={isAuthenticated}>
               <EditEducationAndExperience />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={EnumPages.EDIT_SKILLS}
+          element={
+            <PrivateRoute isAuthenticated={isAuthenticated}>
+              <EditSkills />
             </PrivateRoute>
           }
         />
