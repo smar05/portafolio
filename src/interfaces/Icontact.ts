@@ -1,4 +1,5 @@
 export interface Icontact {
+  _id: string;
   backTitle: string;
   title: string;
   placeholderName: string;
@@ -7,4 +8,5 @@ export interface Icontact {
   placeholderMessage: string;
   textSubmit: string;
   myEmail: string;
+  last: boolean;
 }
