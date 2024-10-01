@@ -1,102 +1,103 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { EnumPages } from "../enums/EnumPages";
+import {
+  IEducation,
+  IeducationAndExperience,
+  IExperience,
+} from "../interfaces/IeducationAndExperience";
+import { BackService, EnumDbEndPoints } from "../services/back";
 
-interface Education {
-  name: string;
-  school: string;
-  begin: string;
-  end: string;
-  description?: string;
-}
+const defaultEducation: IEducation = {
+  name: "",
+  school: "",
+  begin: "",
+  end: "",
+  description: "",
+};
 
-interface Experience {
-  name: string;
-  company: string;
-  begin: string;
-  end: string;
-  time?: string;
-  description?: string;
-}
+const defaultExperience: IExperience = {
+  name: "",
+  company: "",
+  begin: "",
+  end: "",
+  time: "",
+  description: "",
+};
 
-interface EducationAndExperience {
-  backTitle: string;
-  title: string;
-  educationSection: {
-    title: string;
-    education: Education[];
-  };
-  experienceSection: {
-    title: string;
-    experience: Experience[];
-  };
-  last: boolean;
-}
-
-const EditEducationAndExperience: React.FC = () => {
-  const [formData, setFormData] = useState<EducationAndExperience>({
+const EditEducationAndExperience = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<IeducationAndExperience>({
+    _id: "",
     backTitle: "",
     title: "",
     educationSection: {
       title: "",
-      education: [
-        { name: "", school: "", begin: "", end: "", description: "" },
-      ],
+      education: [defaultEducation],
     },
     experienceSection: {
       title: "",
-      experience: [
-        {
-          name: "",
-          company: "",
-          begin: "",
-          end: "",
-          time: "",
-          description: "",
-        },
-      ],
+      experience: [defaultExperience],
     },
-    last: false,
   });
 
-  const handleChange = (
+  const [dbEAE, setDbEAE] = useState<IeducationAndExperience>(null as any);
+
+  useEffect(() => {
+    consultarInfo();
+  }, []);
+
+  function consultarInfo(): void {
+    const fetchDataDb = async () => {
+      try {
+        const response = await BackService.getDbData(
+          EnumDbEndPoints.EDUCATION_AND_EXPERIENCE
+        );
+        setDbEAE(response.data);
+        setFormData(response.data);
+      } catch (error) {}
+    };
+
+    fetchDataDb();
+  }
+
+  const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
+    section: "education" | "experience",
     index: number,
-    section: "education" | "experience"
+    field: string
   ) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
 
-    setFormData((prevState) => {
-      if (section === "education") {
-        const updatedEducation = [...prevState.educationSection.education];
-        updatedEducation[index] = { ...updatedEducation[index], [name]: value };
-
-        return {
-          ...prevState,
-          educationSection: {
-            ...prevState.educationSection,
-            education: updatedEducation,
-          },
-        };
-      } else if (section === "experience") {
-        const updatedExperience = [...prevState.experienceSection.experience];
-        updatedExperience[index] = {
-          ...updatedExperience[index],
-          [name]: value,
-        };
-
-        return {
-          ...prevState,
-          experienceSection: {
-            ...prevState.experienceSection,
-            experience: updatedExperience,
-          },
-        };
-      }
-
-      return prevState;
-    });
+    if (section === "education") {
+      const updatedEducation = [...formData.educationSection.education];
+      updatedEducation[index] = {
+        ...updatedEducation[index],
+        [field]: value,
+      };
+      setFormData({
+        ...formData,
+        educationSection: {
+          ...formData.educationSection,
+          education: updatedEducation,
+        },
+      });
+    } else if (section === "experience") {
+      const updatedExperience = [...formData.experienceSection.experience];
+      updatedExperience[index] = {
+        ...updatedExperience[index],
+        [field]: value,
+      };
+      setFormData({
+        ...formData,
+        experienceSection: {
+          ...formData.experienceSection,
+          experience: updatedExperience,
+        },
+      });
+    }
   };
-
-  const handleGeneralChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -104,212 +105,235 @@ const EditEducationAndExperience: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const addNewEducation = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      educationSection: {
+        ...prevState.educationSection,
+        education: [...prevState.educationSection.education, defaultEducation],
+      },
+    }));
+  };
+
+  const addNewExperience = () => {
+    setFormData((prevState) => ({
+      ...prevState,
+      experienceSection: {
+        ...prevState.experienceSection,
+        experience: [
+          ...prevState.experienceSection.experience,
+          defaultExperience,
+        ],
+      },
+    }));
+  };
+
+  const removeItem = (section: "education" | "experience", index: number) => {
+    if (section === "education") {
+      const updatedEducation = formData.educationSection.education.filter(
+        (_, i) => i !== index
+      );
+      setFormData({
+        ...formData,
+        educationSection: {
+          ...formData.educationSection,
+          education: updatedEducation,
+        },
+      });
+    } else if (section === "experience") {
+      const updatedExperience = formData.experienceSection.experience.filter(
+        (_, i) => i !== index
+      );
+      setFormData({
+        ...formData,
+        experienceSection: {
+          ...formData.experienceSection,
+          experience: updatedExperience,
+        },
+      });
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data:", formData);
+
+    let resAboutMe;
+    try {
+      resAboutMe = await BackService.putData(
+        `${EnumDbEndPoints.EDUCATION_AND_EXPERIENCE}/${dbEAE._id}`,
+        formData
+      );
+    } catch (error) {
+      alert("An error has occurred updating the information");
+    }
+
+    if (!resAboutMe?.data.actualizado) {
+      alert("An error has occurred updating the information");
+      return;
+    }
+
+    alert("The information has been updated");
+    navigate(EnumPages.ADMIN);
   };
 
   return (
-    <div className="container mt-4">
-      <h2>Edit Education and Experience</h2>
+    <div className="container">
       <form onSubmit={handleSubmit}>
-        {/* Back Title and Main Title */}
-        <div className="mb-3">
-          <label htmlFor="backTitle" className="form-label">
-            Background Title
-          </label>
-          <input
-            type="text"
-            id="backTitle"
-            name="backTitle"
-            className="form-control"
-            value={formData.backTitle}
-            onChange={handleGeneralChange}
-            required
-          />
-        </div>
+        <label className="form-label">Title</label>
+        <input
+          type="text"
+          className="form-control"
+          value={formData.title}
+          name="title"
+          onChange={handleChange}
+        />
 
-        <div className="mb-3">
-          <label htmlFor="title" className="form-label">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            className="form-control"
-            value={formData.title}
-            onChange={handleGeneralChange}
-            required
-          />
-        </div>
-
-        {/* Education Section */}
-        <h3>Education Section</h3>
-        <div className="mb-3">
-          <label htmlFor="educationTitle" className="form-label">
-            Education Title
-          </label>
-          <input
-            type="text"
-            id="educationTitle"
-            name="title"
-            className="form-control"
-            value={formData.educationSection.title}
-            onChange={(e) => handleGeneralChange(e)}
-            required
-          />
-        </div>
-
-        {formData.educationSection.education.map((edu, index) => (
-          <div key={index}>
-            <div className="mb-3">
-              <label htmlFor={`educationName${index}`} className="form-label">
-                Education Name
-              </label>
+        {/* Educación */}
+        <div className="mb-5">
+          <h2 className="my-2">{formData.educationSection.title}</h2>
+          {formData.educationSection.education.map((education, index) => (
+            <div key={index} className="mb-4">
+              <label className="form-label">Degree</label>
               <input
                 type="text"
-                id={`educationName${index}`}
-                name="name"
                 className="form-control"
-                value={edu.name}
-                onChange={(e) => handleChange(e, index, "education")}
-                required
+                value={education.name}
+                onChange={(e) =>
+                  handleInputChange(e, "education", index, "name")
+                }
               />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor={`educationSchool${index}`} className="form-label">
-                School
-              </label>
+              <label className="form-label mt-2">School</label>
               <input
                 type="text"
-                id={`educationSchool${index}`}
-                name="school"
                 className="form-control"
-                value={edu.school}
-                onChange={(e) => handleChange(e, index, "education")}
-                required
+                value={education.school}
+                onChange={(e) =>
+                  handleInputChange(e, "education", index, "school")
+                }
               />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor={`educationBegin${index}`} className="form-label">
-                Begin
-              </label>
-              <input
-                type="date"
-                id={`educationBegin${index}`}
-                name="begin"
-                className="form-control"
-                value={edu.begin}
-                onChange={(e) => handleChange(e, index, "education")}
-                required
-              />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor={`educationEnd${index}`} className="form-label">
-                End
-              </label>
-              <input
-                type="date"
-                id={`educationEnd${index}`}
-                name="end"
-                className="form-control"
-                value={edu.end}
-                onChange={(e) => handleChange(e, index, "education")}
-                required
-              />
-            </div>
-          </div>
-        ))}
-
-        {/* Experience Section */}
-        <h3>Experience Section</h3>
-        <div className="mb-3">
-          <label htmlFor="experienceTitle" className="form-label">
-            Experience Title
-          </label>
-          <input
-            type="text"
-            id="experienceTitle"
-            name="title"
-            className="form-control"
-            value={formData.experienceSection.title}
-            onChange={(e) => handleGeneralChange(e)}
-            required
-          />
-        </div>
-
-        {formData.experienceSection.experience.map((exp, index) => (
-          <div key={index}>
-            <div className="mb-3">
-              <label htmlFor={`experienceName${index}`} className="form-label">
-                Job Title
-              </label>
+              <label className="form-label mt-2">Start Date</label>
               <input
                 type="text"
-                id={`experienceName${index}`}
-                name="name"
                 className="form-control"
-                value={exp.name}
-                onChange={(e) => handleChange(e, index, "experience")}
-                required
+                value={education.begin}
+                onChange={(e) =>
+                  handleInputChange(e, "education", index, "begin")
+                }
               />
-            </div>
-
-            <div className="mb-3">
-              <label
-                htmlFor={`experienceCompany${index}`}
-                className="form-label"
+              <label className="form-label mt-2">End Date</label>
+              <input
+                type="text"
+                className="form-control"
+                value={education.end}
+                onChange={(e) =>
+                  handleInputChange(e, "education", index, "end")
+                }
+              />
+              <label className="form-label mt-2">Description</label>
+              <input
+                type="text"
+                className="form-control"
+                value={education.description}
+                onChange={(e) =>
+                  handleInputChange(e, "education", index, "description")
+                }
+              />
+              <button
+                type="button"
+                className="btn btn-danger mt-3"
+                onClick={() => removeItem("education", index)}
               >
-                Company
-              </label>
+                Remove Education
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={addNewEducation}
+          >
+            Add New Education
+          </button>
+        </div>
+
+        {/* Experiencia */}
+        <div className="mb-5">
+          <h2>{formData.experienceSection.title}</h2>
+          {formData.experienceSection.experience.map((experience, index) => (
+            <div key={index} className="mb-4">
+              <label className="form-label">Job Title</label>
               <input
                 type="text"
-                id={`experienceCompany${index}`}
-                name="company"
                 className="form-control"
-                value={exp.company}
-                onChange={(e) => handleChange(e, index, "experience")}
-                required
+                value={experience.name}
+                onChange={(e) =>
+                  handleInputChange(e, "experience", index, "name")
+                }
               />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor={`experienceBegin${index}`} className="form-label">
-                Begin
-              </label>
+              <label className="form-label mt-2">Company</label>
               <input
-                type="date"
-                id={`experienceBegin${index}`}
-                name="begin"
+                type="text"
                 className="form-control"
-                value={exp.begin}
-                onChange={(e) => handleChange(e, index, "experience")}
-                required
+                value={experience.company}
+                onChange={(e) =>
+                  handleInputChange(e, "experience", index, "company")
+                }
               />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor={`experienceEnd${index}`} className="form-label">
-                End
-              </label>
+              <label className="form-label mt-2">Start Date</label>
               <input
-                type="date"
-                id={`experienceEnd${index}`}
-                name="end"
+                type="text"
                 className="form-control"
-                value={exp.end}
-                onChange={(e) => handleChange(e, index, "experience")}
-                required
+                value={experience.begin}
+                onChange={(e) =>
+                  handleInputChange(e, "experience", index, "begin")
+                }
               />
+              <label className="form-label mt-2">End Date</label>
+              <input
+                type="text"
+                className="form-control"
+                value={experience.end}
+                onChange={(e) =>
+                  handleInputChange(e, "experience", index, "end")
+                }
+              />
+              <label className="form-label mt-2">Duration</label>
+              <input
+                type="text"
+                className="form-control"
+                value={experience.time}
+                onChange={(e) =>
+                  handleInputChange(e, "experience", index, "time")
+                }
+              />
+              <label className="form-label mt-2">Description</label>
+              <input
+                type="text"
+                className="form-control"
+                value={experience.description}
+                onChange={(e) =>
+                  handleInputChange(e, "experience", index, "description")
+                }
+              />
+              <button
+                type="button"
+                className="btn btn-danger mt-3"
+                onClick={() => removeItem("experience", index)}
+              >
+                Remove Experience
+              </button>
             </div>
-          </div>
-        ))}
+          ))}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={addNewExperience}
+          >
+            Add New Experience
+          </button>
+        </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary mt-4">
           Save Changes
         </button>
       </form>
