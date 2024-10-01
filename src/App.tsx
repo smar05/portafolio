@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { EnumPages } from "./enums/EnumPages";
 import Admin from "./pages/Admin";
 import EditAboutMe from "./pages/EditAboutMe";
+import EditContact from "./pages/EditContact";
 import EditEducationAndExperience from "./pages/EditEducationAndExperience";
 import EditPresentation from "./pages/EditPresentation";
 import EditSkills from "./pages/EditSkills";
@@ -61,6 +62,14 @@ function App() {
           element={
             <PrivateRoute isAuthenticated={isAuthenticated}>
               <EditSkills />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={EnumPages.EDIT_CONTACT}
+          element={
+            <PrivateRoute isAuthenticated={isAuthenticated}>
+              <EditContact />
             </PrivateRoute>
           }
         />
