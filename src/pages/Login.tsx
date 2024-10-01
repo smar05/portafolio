@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { EnumPages } from "../enums/EnumPages";
 import { BackService } from "../services/back";
@@ -19,6 +19,10 @@ const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
   const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const passwordRegex: RegExp =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   const validateForm = () => {
     let valid: boolean = true;
