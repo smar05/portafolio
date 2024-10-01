@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import Loading from "../components/Loading";
 import { EnumPages } from "../enums/EnumPages";
 import { BackService } from "../services/back";
 
@@ -40,7 +41,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   }, [setIsAuthenticated]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    debugger;
+    return (
+      <>
+        <Loading />
+      </>
+    );
   }
 
   if (!isAuthenticated) {
