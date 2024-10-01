@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { EnumPages } from "./enums/EnumPages";
 import Admin from "./pages/Admin";
 import EditAboutMe from "./pages/EditAboutMe";
@@ -73,6 +73,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="*" element={<Navigate to={EnumPages.HOME} />} />
       </Routes>
     </BrowserRouter>
   );
