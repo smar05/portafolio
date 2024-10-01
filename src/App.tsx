@@ -1,26 +1,33 @@
-import About from "./components/About";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
-import HeaderStart from "./components/HeaderStart";
-import Qualification from "./components/Qualification";
-import Skills from "./components/Skills";
-import VideoModal from "./components/VideoModal";
+import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Admin from "./pages/Admin";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import PrivateRoute from "./router/PrivateRoute";
 
 function App() {
-  return (
-    <>
-      <VideoModal />
-      <HeaderStart />
-      <About />
-      <Qualification />
-      <Skills />
-      <Contact />
-      <Footer />
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-      <a href="#" className="btn btn-outline-dark px-0 back-to-top">
-        <i className="fa fa-angle-double-up"></i>
-      </a>
-    </>
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        <Route
+          path="/login"
+          element={<Login setIsAuthenticated={setIsAuthenticated} />}
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute isAuthenticated={isAuthenticated}>
+              <Admin />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
