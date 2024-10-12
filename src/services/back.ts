@@ -72,4 +72,19 @@ const validateToken = async (): Promise<boolean> => {
   return valido;
 };
 
-export const BackService = { getDbData, login, putData, validateToken };
+/**
+ * Obtener la imagen de perfil
+ *
+ * @return {*}  {string}
+ */
+const getImageUrlProfile = (): string => {
+  return `${backUrl}image/presentation`;
+};
+
+export const BackService = {
+  getDbData,
+  login,
+  putData,
+  validateToken,
+  getImageUrlProfile,
+};

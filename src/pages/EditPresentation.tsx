@@ -5,7 +5,6 @@ import { IPresentation } from "../interfaces/Ipresentation";
 import { BackService, EnumDbEndPoints } from "../services/back";
 
 interface Presentation {
-  profileImg: string;
   name: string;
   tags: string;
   hv: {
@@ -22,7 +21,6 @@ interface Presentation {
 const EditPresentation: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<Presentation>({
-    profileImg: "",
     name: "",
     tags: "",
     hv: {
@@ -106,21 +104,6 @@ const EditPresentation: React.FC = () => {
     <div className="container mt-4">
       <h2>Edit Presentation</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="profileImg" className="form-label">
-            Profile Image URL
-          </label>
-          <input
-            type="text"
-            id="profileImg"
-            name="profileImg"
-            className="form-control"
-            value={formData.profileImg}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name

@@ -1,6 +1,5 @@
 export interface IPresentation {
   _id: string;
-  profileImg: string;
   name: string;
   tags: string;
   hv: { url: string; text: string };
