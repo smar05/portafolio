@@ -91,7 +91,7 @@ function Qualification() {
                             {experience.name}
                           </h5>
                           <p className="mb-2">
-                            <strong>Cinte | IBM</strong> |{" "}
+                            <strong>{experience.company}</strong> |{" "}
                             <small>
                               {experience.begin} - {experience.end} (
                               {experience.time})

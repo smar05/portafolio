@@ -62,7 +62,7 @@ const EditEducationAndExperience = () => {
   }
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     section: "education" | "experience",
     index: number,
     field: string
@@ -230,14 +230,14 @@ const EditEducationAndExperience = () => {
                 }
               />
               <label className="form-label mt-2">Description</label>
-              <input
-                type="text"
+              <textarea
                 className="form-control"
                 value={education.description}
                 onChange={(e) =>
                   handleInputChange(e, "education", index, "description")
                 }
               />
+
               <button
                 type="button"
                 className="btn btn-danger mt-3"
@@ -307,8 +307,7 @@ const EditEducationAndExperience = () => {
                 }
               />
               <label className="form-label mt-2">Description</label>
-              <input
-                type="text"
+              <textarea
                 className="form-control"
                 value={experience.description}
                 onChange={(e) =>

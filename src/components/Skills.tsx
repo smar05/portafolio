@@ -48,12 +48,15 @@ function Skills() {
                       </div>
                       <div className="progress">
                         <div
-                          className={`progress-bar ${front.color}`}
+                          className={`progress-bar`}
                           role="progressbar"
                           aria-valuenow={front.percentage}
                           aria-valuemin={0}
                           aria-valuemax={100}
-                          style={{ width: `${front.percentage}%` }}
+                          style={{
+                            width: `${front.percentage}%`,
+                            backgroundColor: front.color,
+                          }}
                         ></div>
                       </div>
                     </div>
@@ -75,12 +78,15 @@ function Skills() {
                       </div>
                       <div className="progress">
                         <div
-                          className={`progress-bar ${back.color}`}
+                          className={`progress-bar`}
                           role="progressbar"
                           aria-valuenow={back.percentage}
                           aria-valuemin={0}
                           aria-valuemax={100}
-                          style={{ width: `${back.percentage}%` }}
+                          style={{
+                            width: `${back.percentage}%`,
+                            backgroundColor: back.color,
+                          }}
                         ></div>
                       </div>
                     </div>
