@@ -19,14 +19,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
 
   useEffect(() => {
     const validateToken = async () => {
-      const token: string = localStorage.getItem("token") || (null as any);
-
-      if (!token) {
-        setIsAuthenticated(false);
-        setLoading(false);
-        return;
-      }
-
       try {
         const response: boolean = await BackService.validateToken();
         setIsAuthenticated(response);

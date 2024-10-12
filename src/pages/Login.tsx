@@ -51,10 +51,10 @@ const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
       return;
     }
 
-    let autenticatedData: { autenticated: boolean; token: string } = {
-      autenticated: false,
-      token: null as any,
+    let autenticatedData: { authenticated: boolean } = {
+      authenticated: false,
     };
+
     try {
       autenticatedData = (await BackService.login(email, password)).data;
     } catch (error) {
@@ -62,12 +62,11 @@ const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
       return;
     }
 
-    if (!autenticatedData.autenticated) {
+    if (!autenticatedData.authenticated) {
       setIsAuthenticated(false);
       return;
     }
 
-    localStorage.setItem("token", autenticatedData.token);
     setIsAuthenticated(true);
     navigate(EnumPages.ADMIN);
     return;

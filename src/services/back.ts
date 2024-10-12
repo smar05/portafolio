@@ -27,7 +27,13 @@ const login = (
   email: string,
   password: string
 ): Promise<AxiosResponse<any, any>> => {
-  return axios.post(`${backUrl}login`, { email, password });
+  return axios.post(
+    `${backUrl}login`,
+    { email, password },
+    {
+      withCredentials: true,
+    }
+  );
 };
 
 /**
@@ -43,6 +49,7 @@ const putData = (
 ): Promise<AxiosResponse<any, any>> => {
   return axios.put(`${backUrl}${endpoint}`, data, {
     headers: { Authorization: localStorage.getItem("token") || null },
+    withCredentials: true,
   });
 };
 
@@ -52,17 +59,11 @@ const putData = (
  * @return {*}  {Promise<boolean>}
  */
 const validateToken = async (): Promise<boolean> => {
-  const token: string = localStorage.getItem("token") || (null as any);
-
-  if (!token) {
-    return false;
-  }
-
   let valido: boolean = false;
   try {
     valido = (
       await axios.post(`${backUrl}validate-token`, null, {
-        headers: { Authorization: token },
+        withCredentials: true,
       })
     ).data.tokenValido;
   } catch (error) {
