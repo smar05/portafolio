@@ -41,7 +41,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   }, [setIsAuthenticated]);
 
   if (loading) {
-    debugger;
     return (
       <>
         <Loading />
