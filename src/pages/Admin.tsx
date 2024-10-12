@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { EnumPages } from "../enums/EnumPages";
 
 interface DashboardItem {
   id: number;
@@ -21,6 +22,11 @@ const Admin: React.FC = () => {
     navigate(`/edit/${itemName.toLowerCase().replace(/\s+/g, "-")}`);
   };
 
+  const logOut = () => {
+    localStorage.clear();
+    navigate(EnumPages.HOME);
+  };
+
   return (
     <div className="container mt-4">
       <h2 className="text-center mb-4">Dashboard</h2>
@@ -40,6 +46,9 @@ const Admin: React.FC = () => {
           </li>
         ))}
       </ul>
+      <button className="btn btn-danger my-4" onClick={logOut}>
+        Log Out
+      </button>
     </div>
   );
 };
