@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IeducationAndExperience } from "../interfaces/IeducationAndExperience";
 import { BackService, EnumDbEndPoints } from "../services/back";
 
@@ -37,9 +37,9 @@ function Qualification() {
             <div className="col-lg-6">
               <h3 className="mb-4">{dbData?.educationSection.title}</h3>
               <div className="border-left border-primary pt-2 pl-4 ml-2">
-                {dbData?.educationSection.education.map((education) => {
+                {dbData?.educationSection.education.map((education, index) => {
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       <div className="position-relative mb-4">
                         <i
                           className="far fa-dot-circle text-primary position-absolute"
@@ -66,7 +66,7 @@ function Qualification() {
                           <></>
                         )}
                       </div>
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </div>
@@ -74,37 +74,39 @@ function Qualification() {
             <div className="col-lg-6">
               <h3 className="mb-4">{dbData?.experienceSection.title}</h3>
               <div className="border-left border-primary pt-2 pl-4 ml-2">
-                {dbData?.experienceSection.experience.map((experience) => {
-                  return (
-                    <>
-                      <div className="position-relative mb-4">
-                        <i
-                          className="far fa-dot-circle text-primary position-absolute"
-                          style={{
-                            top: "2px",
-                            left: "-32px",
-                            position: "relative",
-                          }}
-                        ></i>
-                        <h5 className="font-weight-bold mb-1">
-                          {experience.name}
-                        </h5>
-                        <p className="mb-2">
-                          <strong>Cinte | IBM</strong> |{" "}
-                          <small>
-                            {experience.begin} - {experience.end} (
-                            {experience.time})
-                          </small>
-                        </p>
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html: experience.description,
-                          }}
-                        ></p>
-                      </div>
-                    </>
-                  );
-                })}
+                {dbData?.experienceSection.experience.map(
+                  (experience, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <div className="position-relative mb-4">
+                          <i
+                            className="far fa-dot-circle text-primary position-absolute"
+                            style={{
+                              top: "2px",
+                              left: "-32px",
+                              position: "relative",
+                            }}
+                          ></i>
+                          <h5 className="font-weight-bold mb-1">
+                            {experience.name}
+                          </h5>
+                          <p className="mb-2">
+                            <strong>Cinte | IBM</strong> |{" "}
+                            <small>
+                              {experience.begin} - {experience.end} (
+                              {experience.time})
+                            </small>
+                          </p>
+                          <p
+                            dangerouslySetInnerHTML={{
+                              __html: experience.description,
+                            }}
+                          ></p>
+                        </div>
+                      </React.Fragment>
+                    );
+                  }
+                )}
               </div>
             </div>
           </div>

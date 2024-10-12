@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Iskills } from "../interfaces/Iskills";
 import { BackService, EnumDbEndPoints } from "../services/back";
 
@@ -36,9 +36,9 @@ function Skills() {
               <div className="row">
                 <h2>{dbData?.frontend.title}</h2>
               </div>
-              {dbData?.frontend.data.map((front) => {
+              {dbData?.frontend.data.map((front, index) => {
                 return (
-                  <>
+                  <React.Fragment key={index}>
                     <div className="skill mb-4">
                       <div className="d-flex justify-content-between">
                         <h6 className="font-weight-bold">{front.name}</h6>
@@ -57,7 +57,7 @@ function Skills() {
                         ></div>
                       </div>
                     </div>
-                  </>
+                  </React.Fragment>
                 );
               })}
             </div>
@@ -65,9 +65,9 @@ function Skills() {
               <div className="row">
                 <h2>{dbData?.backend.title}</h2>
               </div>
-              {dbData?.backend.data.map((back) => {
+              {dbData?.backend.data.map((back, index) => {
                 return (
-                  <>
+                  <React.Fragment key={index}>
                     <div className="skill mb-4">
                       <div className="d-flex justify-content-between">
                         <h6 className="font-weight-bold">{back.name}</h6>
@@ -84,7 +84,7 @@ function Skills() {
                         ></div>
                       </div>
                     </div>
-                  </>
+                  </React.Fragment>
                 );
               })}
             </div>
