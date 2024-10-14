@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EnumPages } from "../enums/EnumPages";
-import { Iskills } from "../interfaces/Iskills";
+import { Iskills, SkillData } from "../interfaces/Iskills";
 import { Alert } from "../services/alert";
 import { BackService, EnumDbEndPoints } from "../services/back";
 
@@ -111,6 +111,23 @@ const EditSkills = () => {
     navigate(EnumPages.ADMIN);
   };
 
+  const removeSkill = (section: "frontend" | "backend", index: number) => {
+    const data: Iskills = formData;
+    if (section === "frontend") {
+      const updatedFrontSkills: SkillData[] = formData.frontend.data.filter(
+        (_, i) => i !== index
+      );
+      data.frontend.data = updatedFrontSkills;
+    } else if (section === "backend") {
+      const updatedBackSkills: SkillData[] = formData.backend.data.filter(
+        (_, i) => i !== index
+      );
+      data.backend.data = updatedBackSkills;
+    }
+
+    setFormData({ ...data });
+  };
+
   const renderSkillSection = (section: "frontend" | "backend") => (
     <div className="skill-section">
       <h3>{formData[section].title}</h3>
@@ -147,6 +164,15 @@ const EditSkills = () => {
               value={skill.color}
               onChange={(e) => handleSkillChange(e, section, index)}
             />
+          </div>
+          <div className="col-md-2">
+            <button
+              type="button"
+              className="btn btn-danger mt-3"
+              onClick={() => removeSkill(section, index)}
+            >
+              Remove skill
+            </button>
           </div>
         </div>
       ))}
