@@ -6,6 +6,7 @@ import {
   IeducationAndExperience,
   IExperience,
 } from "../interfaces/IeducationAndExperience";
+import { Alert } from "../services/alert";
 import { BackService, EnumDbEndPoints } from "../services/back";
 
 const defaultEducation: IEducation = {
@@ -164,15 +165,23 @@ const EditEducationAndExperience = () => {
         formData
       );
     } catch (error) {
-      alert("An error has occurred updating the information");
+      Alert.basicAlert(
+        "Error",
+        "An error has occurred updating the information",
+        "error"
+      );
     }
 
     if (!resAboutMe?.data.actualizado) {
-      alert("An error has occurred updating the information");
+      Alert.basicAlert(
+        "Error",
+        "An error has occurred updating the information",
+        "error"
+      );
       return;
     }
 
-    alert("The information has been updated");
+    Alert.basicAlert("Success", "The information has been updated", "success");
     navigate(EnumPages.ADMIN);
   };
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { EnumPages } from "../enums/EnumPages";
+import { Alert } from "../services/alert";
 import { BackService } from "../services/back";
 
 interface LoginProps {
@@ -48,6 +49,7 @@ const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
     e.preventDefault();
     if (!validateForm()) {
       setIsAuthenticated(false);
+      Alert.basicAlert("Error", "Invalid form", "error");
       return;
     }
 
@@ -59,11 +61,13 @@ const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
       autenticatedData = (await BackService.login(email, password)).data;
     } catch (error) {
       setIsAuthenticated(false);
+      Alert.basicAlert("Error", "Authentication failed", "error");
       return;
     }
 
     if (!autenticatedData.authenticated) {
       setIsAuthenticated(false);
+      Alert.basicAlert("Error", "Authentication failed", "error");
       return;
     }
 

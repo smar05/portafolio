@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EnumPages } from "../enums/EnumPages";
 import { IPresentation } from "../interfaces/Ipresentation";
+import { Alert } from "../services/alert";
 import { BackService, EnumDbEndPoints } from "../services/back";
 
 interface Presentation {
@@ -88,15 +89,23 @@ const EditPresentation: React.FC = () => {
         formData
       );
     } catch (error) {
-      alert("An error has occurred updating the information");
+      Alert.basicAlert(
+        "Error",
+        "An error has occurred updating the information",
+        "error"
+      );
     }
 
     if (!resPresentation?.data.actualizado) {
-      alert("An error has occurred updating the information");
+      Alert.basicAlert(
+        "Error",
+        "An error has occurred updating the information",
+        "error"
+      );
       return;
     }
 
-    alert("The information has been updated");
+    Alert.basicAlert("Success", "The information has been updated", "success");
     navigate(EnumPages.ADMIN);
   };
 

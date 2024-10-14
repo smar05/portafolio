@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EnumPages } from "../enums/EnumPages";
 import { Icontact } from "../interfaces/Icontact";
+import { Alert } from "../services/alert";
 import { BackService, EnumDbEndPoints } from "../services/back";
 
 const EditContact = () => {
@@ -57,16 +58,24 @@ const EditContact = () => {
         formData
       );
     } catch (error) {
-      alert("An error has occurred updating the information");
+      Alert.basicAlert(
+        "Error",
+        "An error has occurred updating the information",
+        "error"
+      );
       return;
     }
 
     if (!resContact?.data.actualizado) {
-      alert("An error has occurred updating the information");
+      Alert.basicAlert(
+        "Error",
+        "An error has occurred updating the information",
+        "error"
+      );
       return;
     }
 
-    alert("The information has been updated");
+    Alert.basicAlert("Success", "The information has been updated", "success");
     navigate(EnumPages.ADMIN);
   };
 
