@@ -21,7 +21,7 @@ const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   useEffect(() => {
-    localStorage.clear();
+    BackService.logout();
   }, []);
 
   const validateForm = () => {

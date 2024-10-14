@@ -37,6 +37,17 @@ const login = (
 };
 
 /**
+ * Borrar credenciales
+ *
+ * @return {*}  {Promise<AxiosResponse<any, any>>}
+ */
+const logout = (): Promise<AxiosResponse<any, any>> => {
+  return axios.post(`${backUrl}logout`, null, {
+    withCredentials: true,
+  });
+};
+
+/**
  * REST put
  *
  * @param {string} endpoint
@@ -85,6 +96,7 @@ const getImageUrlProfile = (): string => {
 export const BackService = {
   getDbData,
   login,
+  logout,
   putData,
   validateToken,
   getImageUrlProfile,

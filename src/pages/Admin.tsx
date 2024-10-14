@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { EnumPages } from "../enums/EnumPages";
+import { BackService } from "../services/back";
 
 interface DashboardItem {
   id: number;
@@ -22,8 +23,8 @@ const Admin: React.FC = () => {
     navigate(`/edit/${itemName.toLowerCase().replace(/\s+/g, "-")}`);
   };
 
-  const logOut = () => {
-    localStorage.clear();
+  const logOut = async () => {
+    await BackService.logout();
     navigate(EnumPages.HOME);
   };
 
