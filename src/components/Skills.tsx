@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Iskills } from "../interfaces/Iskills";
 import { BackService, EnumDbEndPoints } from "../services/back";
 
@@ -36,9 +36,9 @@ function Skills() {
               <div className="row">
                 <h2>{dbData?.frontend.title}</h2>
               </div>
-              {dbData?.frontend.data.map((front) => {
+              {dbData?.frontend.data.map((front, index) => {
                 return (
-                  <>
+                  <React.Fragment key={index}>
                     <div className="skill mb-4">
                       <div className="d-flex justify-content-between">
                         <h6 className="font-weight-bold">{front.name}</h6>
@@ -48,16 +48,19 @@ function Skills() {
                       </div>
                       <div className="progress">
                         <div
-                          className={`progress-bar ${front.color}`}
+                          className={`progress-bar`}
                           role="progressbar"
                           aria-valuenow={front.percentage}
                           aria-valuemin={0}
                           aria-valuemax={100}
-                          style={{ width: `${front.percentage}%` }}
+                          style={{
+                            width: `${front.percentage}%`,
+                            backgroundColor: front.color,
+                          }}
                         ></div>
                       </div>
                     </div>
-                  </>
+                  </React.Fragment>
                 );
               })}
             </div>
@@ -65,9 +68,9 @@ function Skills() {
               <div className="row">
                 <h2>{dbData?.backend.title}</h2>
               </div>
-              {dbData?.backend.data.map((back) => {
+              {dbData?.backend.data.map((back, index) => {
                 return (
-                  <>
+                  <React.Fragment key={index}>
                     <div className="skill mb-4">
                       <div className="d-flex justify-content-between">
                         <h6 className="font-weight-bold">{back.name}</h6>
@@ -75,16 +78,19 @@ function Skills() {
                       </div>
                       <div className="progress">
                         <div
-                          className={`progress-bar ${back.color}`}
+                          className={`progress-bar`}
                           role="progressbar"
                           aria-valuenow={back.percentage}
                           aria-valuemin={0}
                           aria-valuemax={100}
-                          style={{ width: `${back.percentage}%` }}
+                          style={{
+                            width: `${back.percentage}%`,
+                            backgroundColor: back.color,
+                          }}
                         ></div>
                       </div>
                     </div>
-                  </>
+                  </React.Fragment>
                 );
               })}
             </div>

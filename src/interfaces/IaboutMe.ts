@@ -1,4 +1,5 @@
 export interface IaboutMe {
+  _id: string;
   backTitle: string;
   title: string;
   subTitle: string;
