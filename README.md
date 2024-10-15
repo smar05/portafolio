@@ -13,7 +13,7 @@ Este es mi portafolio, donde se presenta mi experiencia laboral y académica.
 Para clonar el repositorio y instalar las dependencias, ejecuta:
 
 ```bash
-git clone [<URL_DEL_REPOSITORIO>](https://github.com/smar05/portafolio)
+git clone https://github.com/smar05/portafolio
 cd <NOMBRE_DEL_PROYECTO>
 npm install
 ```
@@ -44,6 +44,10 @@ Esto generará una carpeta dist que contiene los archivos listos para ser desple
   - Página Principal: Accede a la ruta principal (/) para ver mi portafolio.
   - Página de Login: Dirígete a /login para iniciar sesión con usuario y contraseña.
   - Página de Administración: Una vez que hayas iniciado sesión, podrás acceder a /admin, donde encontrarás varias rutas para actualizar la información de mi portafolio.
+
+## **Producción**
+
+[Url Producción](https://phenomenal-beignet-f02fb3.netlify.app/)
 
 ## **Contacto**
 Si deseas ponerte en contacto, puedes enviarme un correo a mantillasanchezr@gmail.com.
