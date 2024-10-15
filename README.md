@@ -1,30 +1,52 @@
-# React + TypeScript + Vite
+# Portafolio de Ricardo Mantilla
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este es mi portafolio, donde se presenta mi experiencia laboral y académica.
 
-Currently, two official plugins are available:
+## Tecnologías Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React
+- Vite
+- TypeScript
 
-## Expanding the ESLint configuration
+## Instalación
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Para clonar el repositorio y instalar las dependencias, ejecuta:
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```bash
+git clone [<URL_DEL_REPOSITORIO>](https://github.com/smar05/portafolio)
+cd <NOMBRE_DEL_PROYECTO>
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Uso
+
+1. **Ejecutar en Modo Desarrollo**
+
+   Para ejecutar la aplicación en modo de desarrollo, utiliza el siguiente comando:
+
+   ```bash
+   npm run dev
+   ```
+
+Este comando iniciará un servidor de desarrollo y podrás acceder a la aplicación en tu navegador a través de http://localhost:3001.
+
+2. **Construir para Producción**
+
+  Para construir la aplicación para producción y optimizarla para su despliegue, usa el siguiente comando:
+  ```bash
+  npm run build
+  ```
+
+Esto generará una carpeta dist que contiene los archivos listos para ser desplegados en un servidor.
+
+3. **Acceder a Rutas Específicas**
+
+  - Página Principal: Accede a la ruta principal (/) para ver mi portafolio.
+  - Página de Login: Dirígete a /login para iniciar sesión con usuario y contraseña.
+  - Página de Administración: Una vez que hayas iniciado sesión, podrás acceder a /admin, donde encontrarás varias rutas para actualizar la información de mi portafolio.
+
+## **Contacto**
+Si deseas ponerte en contacto, puedes enviarme un correo a mantillasanchezr@gmail.com.
+
+Autor
+Ricardo Mantilla
