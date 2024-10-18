@@ -222,7 +222,7 @@ const EditEducationAndExperience = () => {
               />
               <label className="form-label mt-2">Start Date</label>
               <input
-                type="text"
+                type="month"
                 className="form-control"
                 value={education.begin}
                 onChange={(e) =>
@@ -231,7 +231,7 @@ const EditEducationAndExperience = () => {
               />
               <label className="form-label mt-2">End Date</label>
               <input
-                type="text"
+                type="month"
                 className="form-control"
                 value={education.end}
                 onChange={(e) =>
@@ -290,7 +290,7 @@ const EditEducationAndExperience = () => {
               />
               <label className="form-label mt-2">Start Date</label>
               <input
-                type="text"
+                type="month"
                 className="form-control"
                 value={experience.begin}
                 onChange={(e) =>
@@ -299,7 +299,7 @@ const EditEducationAndExperience = () => {
               />
               <label className="form-label mt-2">End Date</label>
               <input
-                type="text"
+                type="month"
                 className="form-control"
                 value={experience.end}
                 onChange={(e) =>
