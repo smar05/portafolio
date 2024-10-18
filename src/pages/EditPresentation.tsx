@@ -35,6 +35,19 @@ const EditPresentation: React.FC = () => {
     last: false,
   });
 
+  const [selectedFile, setSelectedFile] = useState<Blob>(null as any);
+  const [preview, setPreview] = useState<string>(null as any);
+
+  const handleFileChange = (e: Event | undefined) => {
+    const file: Blob = (e?.target as any)?.files[0];
+    setSelectedFile(file);
+
+    if (file) {
+      const objectUrl: string = URL.createObjectURL(file);
+      setPreview(objectUrl);
+    }
+  };
+
   const [dbPresentation, setDbPresentation] = useState<IPresentation>(
     null as any
   );
@@ -82,6 +95,20 @@ const EditPresentation: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!selectedFile) {
+      alert("Please select an image first");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", selectedFile);
+
+    try {
+      BackService.sendImage(dbPresentation._id, formData);
+    } catch (error) {
+      Alert.basicAlert("Error", "Error uploading the image", "error");
+    }
+
     let resPresentation;
     try {
       resPresentation = await BackService.putData(
@@ -113,6 +140,33 @@ const EditPresentation: React.FC = () => {
     <div className="container mt-4">
       <h2>Edit Presentation</h2>
       <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <div className="mb-3">
+            <label htmlFor="formFile" className="form-label">
+              Profile image
+            </label>
+            <input
+              className="form-control"
+              type="file"
+              id="formFile"
+              onChange={() => {
+                handleFileChange(event);
+              }}
+              accept="image/*"
+            />
+          </div>
+
+          {preview && (
+            <div className="mb-3">
+              <img
+                src={preview}
+                alt="Preview"
+                className="img-thumbnail"
+                style={{ maxWidth: "200px" }}
+              />
+            </div>
+          )}
+        </div>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
             Name
