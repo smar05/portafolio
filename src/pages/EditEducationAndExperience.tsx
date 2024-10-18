@@ -22,7 +22,6 @@ const defaultExperience: IExperience = {
   company: "",
   begin: "",
   end: "",
-  time: "",
   description: "",
 };
 
@@ -304,15 +303,6 @@ const EditEducationAndExperience = () => {
                 value={experience.end}
                 onChange={(e) =>
                   handleInputChange(e, "experience", index, "end")
-                }
-              />
-              <label className="form-label mt-2">Duration</label>
-              <input
-                type="text"
-                className="form-control"
-                value={experience.time}
-                onChange={(e) =>
-                  handleInputChange(e, "experience", index, "time")
                 }
               />
               <label className="form-label mt-2">Description</label>

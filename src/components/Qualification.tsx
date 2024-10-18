@@ -39,6 +39,27 @@ function Qualification() {
     return dateB - dateA;
   };
 
+  const calculateDifference = (start: string, end: string): string => {
+    const [startYear, startMonth] = start.split("-").map(Number);
+    const [endYear, endMonth] = end.split("-").map(Number);
+
+    const yearDifference: number = endYear - startYear;
+    const monthDifference: number = endMonth - startMonth;
+
+    let totalMonths: number = yearDifference * 12 + monthDifference;
+
+    if (totalMonths < 0) totalMonths = 0;
+
+    const years: number = Math.floor(totalMonths / 12);
+    const months: number = totalMonths % 12;
+
+    if (years > 0) {
+      return `${years} year(s) and ${months} month(s)`;
+    } else {
+      return `${months} month(s)`;
+    }
+  };
+
   return (
     <>
       <div className="container-fluid py-5" id="qualification">
@@ -118,7 +139,11 @@ function Qualification() {
                             <strong>{experience.company}</strong> |{" "}
                             <small>
                               {experience.begin} - {experience.end} (
-                              {experience.time})
+                              {calculateDifference(
+                                experience.begin,
+                                experience.end
+                              )}
+                              )
                             </small>
                           </p>
                           <p

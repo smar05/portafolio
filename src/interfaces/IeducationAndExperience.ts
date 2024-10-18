@@ -25,6 +25,5 @@ export interface IExperience {
   company: string;
   begin: string;
   end: string;
-  time: string;
   description: string;
 }
