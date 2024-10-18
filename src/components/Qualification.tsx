@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { IeducationAndExperience } from "../interfaces/IeducationAndExperience";
+import {
+  IEducation,
+  IeducationAndExperience,
+  IExperience,
+} from "../interfaces/IeducationAndExperience";
 import { BackService, EnumDbEndPoints } from "../services/back";
 
 function Qualification() {
@@ -17,6 +21,44 @@ function Qualification() {
 
     fetchDataDb();
   }, []);
+
+  /**
+   * Ordenar por la facha mas actual
+   *
+   * @param {(IEducation | IExperience)} a
+   * @param {(IEducation | IExperience)} b
+   * @return {*}  {number}
+   */
+  const orderByEndDate = (
+    a: IEducation | IExperience,
+    b: IEducation | IExperience
+  ): number => {
+    const dateA: number = new Date(a.end + "-01").getTime();
+    const dateB: number = new Date(b.end + "-01").getTime();
+
+    return dateB - dateA;
+  };
+
+  const calculateDifference = (start: string, end: string): string => {
+    const [startYear, startMonth] = start.split("-").map(Number);
+    const [endYear, endMonth] = end.split("-").map(Number);
+
+    const yearDifference: number = endYear - startYear;
+    const monthDifference: number = endMonth - startMonth;
+
+    let totalMonths: number = yearDifference * 12 + monthDifference;
+
+    if (totalMonths < 0) totalMonths = 0;
+
+    const years: number = Math.floor(totalMonths / 12);
+    const months: number = totalMonths % 12;
+
+    if (years > 0) {
+      return `${years} year(s) and ${months} month(s)`;
+    } else {
+      return `${months} month(s)`;
+    }
+  };
 
   return (
     <>
@@ -37,45 +79,48 @@ function Qualification() {
             <div className="col-lg-6">
               <h3 className="mb-4">{dbData?.educationSection.title}</h3>
               <div className="border-left border-primary pt-2 pl-4 ml-2">
-                {dbData?.educationSection.education.map((education, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <div className="position-relative mb-4">
-                        <i
-                          className="far fa-dot-circle text-primary position-absolute"
-                          style={{
-                            top: "2px",
-                            left: "-32px",
-                            position: "relative",
-                          }}
-                        ></i>
-                        <h5 className="font-weight-bold mb-1">
-                          {education.name}
-                        </h5>
-                        <p className="mb-2">
-                          <strong>{education.school}</strong> |{" "}
-                          <small>
-                            {education.begin} - {education.end}
-                          </small>
-                        </p>
-                        {education.description ? (
-                          <>
-                            <p>{education.description}</p>
-                          </>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    </React.Fragment>
-                  );
-                })}
+                {dbData?.educationSection.education
+                  .sort(orderByEndDate)
+                  .map((education, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <div className="position-relative mb-4">
+                          <i
+                            className="far fa-dot-circle text-primary position-absolute"
+                            style={{
+                              top: "2px",
+                              left: "-32px",
+                              position: "relative",
+                            }}
+                          ></i>
+                          <h5 className="font-weight-bold mb-1">
+                            {education.name}
+                          </h5>
+                          <p className="mb-2">
+                            <strong>{education.school}</strong> |{" "}
+                            <small>
+                              {education.begin} - {education.end}
+                            </small>
+                          </p>
+                          {education.description ? (
+                            <>
+                              <p>{education.description}</p>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      </React.Fragment>
+                    );
+                  })}
               </div>
             </div>
             <div className="col-lg-6">
               <h3 className="mb-4">{dbData?.experienceSection.title}</h3>
               <div className="border-left border-primary pt-2 pl-4 ml-2">
-                {dbData?.experienceSection.experience.map(
-                  (experience, index) => {
+                {dbData?.experienceSection.experience
+                  .sort(orderByEndDate)
+                  .map((experience, index) => {
                     return (
                       <React.Fragment key={index}>
                         <div className="position-relative mb-4">
@@ -94,7 +139,11 @@ function Qualification() {
                             <strong>{experience.company}</strong> |{" "}
                             <small>
                               {experience.begin} - {experience.end} (
-                              {experience.time})
+                              {calculateDifference(
+                                experience.begin,
+                                experience.end
+                              )}
+                              )
                             </small>
                           </p>
                           <p
@@ -105,8 +154,7 @@ function Qualification() {
                         </div>
                       </React.Fragment>
                     );
-                  }
-                )}
+                  })}
               </div>
             </div>
           </div>

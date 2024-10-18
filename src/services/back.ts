@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-const backUrl: string = "https://portafolioback-latest.onrender.com/db/";
+const backUrl: string = "http://localhost:5000/db/"; //"https://portafolioback-latest.onrender.com/db/";
 
 export enum EnumDbEndPoints {
   ABOUT_ME = "about-me",
@@ -93,6 +93,24 @@ const getImageUrlProfile = (): string => {
   return `${backUrl}image/presentation`;
 };
 
+/**
+ * Enviar una imagen al back
+ *
+ * @param {string} endpoint
+ * @param {FormData} formData
+ * @return {*}  {Promise<AxiosResponse<any, any>>}
+ */
+const sendImage = (
+  endpoint: string,
+  formData: FormData
+): Promise<AxiosResponse<any, any>> => {
+  return axios.put(`${backUrl}upload-image/${endpoint}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 export const BackService = {
   getDbData,
   login,
@@ -100,4 +118,5 @@ export const BackService = {
   putData,
   validateToken,
   getImageUrlProfile,
+  sendImage,
 };
