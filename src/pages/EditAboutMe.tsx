@@ -54,7 +54,9 @@ const EditAboutMe: React.FC = () => {
     fetchDataDb();
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
@@ -145,8 +147,7 @@ const EditAboutMe: React.FC = () => {
           <label htmlFor="content" className="form-label">
             Content
           </label>
-          <input
-            type="text"
+          <textarea
             id="content"
             name="content"
             className="form-control"
