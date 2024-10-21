@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 
-const backUrl: string = "http://localhost:5000/db/"; //"https://portafolioback-latest.onrender.com/db/";
+const backUrl: string = import.meta.env.VITE_BACK_URL;
 
 export enum EnumDbEndPoints {
   ABOUT_ME = "about-me",
