@@ -1,30 +1,69 @@
-# React + TypeScript + Vite
+# Frontend for Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend of my personal portfolio, developed with React and Vite, which connects to a backend to manage information and authentication. It allows the display of my portfolio and the modification of its content through an admin interface.
 
-Currently, two official plugins are available:
+## Installation and configuration
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prerequisites
+Before starting, make sure you have:
 
-## Expanding the ESLint configuration
+  - [Node.js v20.0.0](https://nodejs.org/)
+  - A running backend, [portafolioback](https://github.com/smar05/portafolio-back)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Develop enviroment
+1. **Clone the repository**
+   
+  ```bash
+  git clone https://github.com/smar05/portfolio.git
+  cd portfolio
+  ```
 
-- Configure the top-level `parserOptions` property like this:
+2. **Install dependencies**
+   
+  Install the dependencies with:
+  ```bash
+  npm install
+  ```
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+3. **Environment Variables**
+   
+  Create a .env file in the root directory with the following content:
+  ```bash
+  VITE_BACK_URL=https://portafolioback-latest.onrender.com/db/
+  ```
+
+  This file sets the backend URL for API requests.
+
+4. **Run in Development Mode**
+
+   To start the development server, run:
+   ```bash
+   npm run dev
+   ```
+
+  This will start the app on port 3001. You can access it at:
+  ```bash
+  http://localhost:3001
+  ```
+
+### Production Deployment
+To generate the production build, run:
+```bash
+npm run build
 ```
+This will create a public folder with the static files ready for deployment.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+#### Hosting on Netlify
+The frontend of this portfolio is hosted on [Netlify](https://app.netlify.com/). After generating the production files, you can upload the public folder to Netlify or any other hosting service. The portfolio is publicly available at this [Link](https://phenomenal-beignet-f02fb3.netlify.app)
+
+## Technologies Used
+- React
+- Vite
+- TypeScript
+- Netlify (for hosting)
+
+## Contact Me
+
+If you have any questions or suggestions, feel free to reach out to me via email:
+
+📧 **[mantillasanchezr@gmail.com](mailto:mantillasanchezr@gmail.com)**
